@@ -81,9 +81,5 @@ Tiap tahap tutup dengan `go build ./... && go vet ./...`.
 
 ## Catatan
 
-- `docs/spec/design.md` = spec referensi (modul Auth) tapi menyebut *manual
-  wiring* + *slog* + gRPC + property-test berat. **Diselaraskan**: pakai dig
-  (bukan manual), zap (bukan slog), scope lean. Pola apperror/response/route
-  di design.md tetap jadi acuan implementasi `pkg/`.
 - Module name tetap `go-starter-kit`; produk yang meng-clone mengganti path
   module.
