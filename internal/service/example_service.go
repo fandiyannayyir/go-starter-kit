@@ -2,44 +2,11 @@ package service
 
 import (
 	"context"
-	"time"
 
 	"github.com/google/uuid"
 
 	"go-starter-kit/internal/domain/example"
 )
-
-// --- DTOs ---
-
-type CreateExampleRequest struct {
-	Name        string `json:"name" validate:"required"`
-	Description string `json:"description"`
-}
-
-type UpdateExampleRequest struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-}
-
-type ExampleResponse struct {
-	ID          string    `json:"id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
-}
-
-func toExampleResponse(e *example.Example) ExampleResponse {
-	return ExampleResponse{
-		ID:          e.ID,
-		Name:        e.Name,
-		Description: e.Description,
-		CreatedAt:   e.CreatedAt,
-		UpdatedAt:   e.UpdatedAt,
-	}
-}
-
-// --- Service ---
 
 // ExampleService holds the example business logic. Operations spanning more
 // than one write should wrap their repo calls in shared.TxManager.WithTransaction
