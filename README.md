@@ -26,6 +26,17 @@ go run . migrate up             # buat tabel (migrasi ter-embed di binary)
 go run . server                 # start HTTP server di APP_HOST:APP_PORT
 ```
 
+## Testing
+
+```bash
+go test ./...          # semua test; integration test memutar Postgres via Docker (testcontainers)
+go test -short ./...   # lewati integration test (tanpa Docker)
+```
+
+Tiga lapis: unit service (repo palsu, tanpa DB), handler lewat HTTP in-process
+(httptest — menguji middleware, validator, router, error handler), dan
+integration repository (Postgres asli + migrasi ter-embed).
+
 ## Endpoint
 
 | Method | Path              | Keterangan                         |
