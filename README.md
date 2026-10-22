@@ -1,8 +1,8 @@
 # go-starter-kit
 
-Template layanan Go untuk produk Fandi. Organisasi kode ala jajanin
-(`domain → service → repository → handler`, route sebagai data) di atas infra
-ala remittance-core (`dig`, `TxManager`, zap, Echo).
+Starter kit layanan HTTP berbahasa Go dengan arsitektur berlapis
+(`domain → service → repository → handler`, route sebagai data) di atas
+Echo + dig + GORM — siap di-clone sebagai fondasi layanan baru.
 
 ## Stack
 
@@ -86,7 +86,7 @@ Terakhir, daftarkan: `Provide` konstruktor di `service/di.go`,
 `internal/router/router.go`; dan migrasi baru di `migrations/`
 (`NNNNN_nama.sql` — otomatis ikut ter-embed).
 
-## Kloning untuk produk
+## Memakai sebagai template
 
 Ganti nama module `go-starter-kit` di `go.mod` dan seluruh import path dengan
-nama produk.
+nama project Anda.

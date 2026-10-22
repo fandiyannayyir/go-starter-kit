@@ -7,3 +7,6 @@
 # runtime / OS artifacts
 *.log
 .DS_Store
+
+# internal planning doc (local only, not for the public repo)
+PLAN.md
