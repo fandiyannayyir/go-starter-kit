@@ -26,6 +26,9 @@ func (h *ExampleHandler) Create(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		return err
 	}
+	if err := c.Validate(&req); err != nil {
+		return err
+	}
 	resp, err := h.svc.Create(c.Request().Context(), req)
 	if err != nil {
 		return err
@@ -60,6 +63,9 @@ func (h *ExampleHandler) List(c echo.Context) error {
 func (h *ExampleHandler) Update(c echo.Context) error {
 	var req service.UpdateExampleRequest
 	if err := c.Bind(&req); err != nil {
+		return err
+	}
+	if err := c.Validate(&req); err != nil {
 		return err
 	}
 	resp, err := h.svc.Update(c.Request().Context(), c.Param("id"), req)

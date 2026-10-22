@@ -12,7 +12,7 @@ import (
 // --- DTOs ---
 
 type CreateExampleRequest struct {
-	Name        string `json:"name"`
+	Name        string `json:"name" validate:"required"`
 	Description string `json:"description"`
 }
 

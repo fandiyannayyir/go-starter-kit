@@ -17,6 +17,7 @@ import (
 
 	"go-starter-kit/internal/middleware"
 	"go-starter-kit/internal/shared/log"
+	"go-starter-kit/internal/shared/validate"
 	"go-starter-kit/pkg/apperror"
 	"go-starter-kit/pkg/response"
 )
@@ -33,6 +34,7 @@ const shutdownTimeout = 10 * time.Second
 func New(logger log.Logger) *echo.Echo {
 	e := echo.New()
 	e.HideBanner = true
+	e.Validator = validate.New()
 	e.HTTPErrorHandler = errorHandler(logger)
 
 	e.Use(middleware.RequestID())
@@ -53,6 +55,12 @@ func errorHandler(logger log.Logger) echo.HTTPErrorHandler {
 			return
 		}
 		r := c.Request()
+
+		if fields, ok := validate.FieldErrors(err); ok {
+			_ = c.JSON(http.StatusBadRequest,
+				response.ValidationError(r, "VALIDATION_ERROR", "validation failed", fields))
+			return
+		}
 
 		var appErr apperror.AppError
 		if errors.As(err, &appErr) {
