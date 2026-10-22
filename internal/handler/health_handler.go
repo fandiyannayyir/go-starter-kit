@@ -10,7 +10,6 @@ import (
 	"go-starter-kit/configs/db"
 	"go-starter-kit/internal/shared/cache"
 	"go-starter-kit/pkg/response"
-	"go-starter-kit/pkg/route"
 )
 
 // HealthHandler reports process liveness and dependency readiness.
@@ -51,15 +50,4 @@ func (h *HealthHandler) Ready(c echo.Context) error {
 			fmt.Sprintf("dependency unavailable (db=%s cache=%s)", checks["db"], checks["cache"])))
 	}
 	return c.JSON(http.StatusOK, response.OK(r, checks, "ready"))
-}
-
-// Routes returns the health route groups (public, no prefix; mounted by cmd
-// into the shared registry).
-func (h *HealthHandler) Routes() []route.RouteGroup {
-	return []route.RouteGroup{{
-		Routes: []route.Route{
-			{Method: http.MethodGet, Path: "/health", Handler: h.Live, Public: true},
-			{Method: http.MethodGet, Path: "/ready", Handler: h.Ready, Public: true},
-		},
-	}}
 }

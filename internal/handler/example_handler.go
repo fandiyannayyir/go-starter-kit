@@ -8,7 +8,6 @@ import (
 
 	"go-starter-kit/internal/service"
 	"go-starter-kit/pkg/response"
-	"go-starter-kit/pkg/route"
 )
 
 // ExampleHandler is the HTTP surface of the example domain. Handlers return the
@@ -75,18 +74,4 @@ func (h *ExampleHandler) Delete(c echo.Context) error {
 		return err
 	}
 	return c.JSON(http.StatusOK, response.OK[any](c.Request(), nil, "example deleted"))
-}
-
-// Routes returns the example route groups (mounted by cmd into the registry).
-func (h *ExampleHandler) Routes() []route.RouteGroup {
-	return []route.RouteGroup{{
-		Prefix: "/v1/examples",
-		Routes: []route.Route{
-			{Method: http.MethodPost, Path: "", Handler: h.Create},
-			{Method: http.MethodGet, Path: "", Handler: h.List},
-			{Method: http.MethodGet, Path: "/:id", Handler: h.Get},
-			{Method: http.MethodPut, Path: "/:id", Handler: h.Update},
-			{Method: http.MethodDelete, Path: "/:id", Handler: h.Delete},
-		},
-	}}
 }
