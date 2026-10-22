@@ -1,0 +1,9 @@
+.gocache/
+.gomodcache/
+
+# local env (holds secrets); .env.example is tracked
+.env
+
+# runtime / OS artifacts
+*.log
+.DS_Store
