@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 
 	"go-starter-kit/internal/domain/example"
-	"go-starter-kit/internal/service"
+	examplesvc "go-starter-kit/internal/service/example"
 	"go-starter-kit/internal/shared"
 )
 
@@ -49,10 +49,10 @@ type exampleRepo struct {
 	db *gorm.DB
 }
 
-// NewExampleRepository returns a GORM-backed service.ExampleRepository. Each
+// NewExampleRepository returns a GORM-backed example service Repository. Each
 // method uses shared.GetDB, so a transaction placed on the context by TxManager
 // is used automatically; otherwise it falls back to the default handle.
-func NewExampleRepository(db *gorm.DB) service.ExampleRepository {
+func NewExampleRepository(db *gorm.DB) examplesvc.Repository {
 	return &exampleRepo{db: db}
 }
 

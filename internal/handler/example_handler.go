@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"go-starter-kit/internal/service"
+	"go-starter-kit/internal/service/example"
 	"go-starter-kit/pkg/response"
 )
 
@@ -14,15 +14,15 @@ import (
 // error from the service as-is; the centralized error handler maps AppError to
 // the response envelope and the correct status.
 type ExampleHandler struct {
-	svc service.ExampleService
+	svc example.Service
 }
 
-func NewExampleHandler(svc service.ExampleService) *ExampleHandler {
+func NewExampleHandler(svc example.Service) *ExampleHandler {
 	return &ExampleHandler{svc: svc}
 }
 
 func (h *ExampleHandler) Create(c echo.Context) error {
-	var req service.CreateExampleRequest
+	var req example.CreateRequest
 	if err := c.Bind(&req); err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func (h *ExampleHandler) List(c echo.Context) error {
 }
 
 func (h *ExampleHandler) Update(c echo.Context) error {
-	var req service.UpdateExampleRequest
+	var req example.UpdateRequest
 	if err := c.Bind(&req); err != nil {
 		return err
 	}

@@ -1,25 +1,25 @@
-package service
+package example
 
 import (
 	"time"
 
-	"go-starter-kit/internal/domain/example"
+	domain "go-starter-kit/internal/domain/example"
 )
 
-// DTOs: the input/output contract of ExampleService (mazhab A — the service
-// owns its request/response shapes; handlers just bind, validate and pass).
+// DTOs: the input/output contract of Service (mazhab A — the service owns its
+// request/response shapes; handlers just bind, validate and pass).
 
-type CreateExampleRequest struct {
+type CreateRequest struct {
 	Name        string `json:"name" validate:"required"`
 	Description string `json:"description"`
 }
 
-type UpdateExampleRequest struct {
+type UpdateRequest struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
 
-type ExampleResponse struct {
+type Response struct {
 	ID          string    `json:"id"`
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
@@ -27,8 +27,8 @@ type ExampleResponse struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-func toExampleResponse(e *example.Example) ExampleResponse {
-	return ExampleResponse{
+func toResponse(e *domain.Example) Response {
+	return Response{
 		ID:          e.ID,
 		Name:        e.Name,
 		Description: e.Description,
