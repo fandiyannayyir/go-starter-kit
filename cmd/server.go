@@ -5,9 +5,9 @@ import (
 
 	"go-starter-kit/internal/di"
 	"go-starter-kit/internal/handler"
+	"go-starter-kit/internal/router"
 	"go-starter-kit/internal/server"
 	"go-starter-kit/internal/shared"
-	"go-starter-kit/pkg/route"
 )
 
 var serverCmd = &cobra.Command{
@@ -24,10 +24,7 @@ var serverCmd = &cobra.Command{
 
 			e := server.New(dep.Logger)
 
-			reg := route.NewRegistry()
-			reg.Add(health.Routes()...)
-			reg.Add(example.Routes()...)
-			if err := reg.Register(e); err != nil {
+			if err := router.Build(e, health, example); err != nil {
 				return err
 			}
 
