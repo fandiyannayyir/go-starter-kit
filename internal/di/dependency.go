@@ -8,6 +8,7 @@ import (
 	"go-starter-kit/internal/shared"
 
 	"go.uber.org/dig"
+	"gorm.io/gorm"
 )
 
 var (
@@ -37,6 +38,11 @@ func RegisterDependency(container *dig.Container) error {
 	}
 	if err := container.Provide(func(database *db.Database) shared.TxManager {
 		return shared.NewTxManager(database.DB)
+	}); err != nil {
+		return err
+	}
+	if err := container.Provide(func(database *db.Database) *gorm.DB {
+		return database.DB
 	}); err != nil {
 		return err
 	}
