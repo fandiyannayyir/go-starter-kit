@@ -10,16 +10,19 @@ ala remittance-core (`dig`, `TxManager`, zap, Echo).
 - **DI:** `dig` (`internal/di`)
 - **DB:** PostgreSQL + GORM (query GORM biasa di balik interface repository)
 - **Cache:** Redis
-- **Migrasi:** goose (`migrations/`, dijalankan lewat perintah `migrate`)
+- **Migrasi:** goose, **ter-embed ke binary** (`migrations/embed.go`) — perintah
+  `migrate` jalan dari direktori mana pun, deploy cukup satu binary
 - **Config:** viper + `.env` (lihat `.env.example`)
 - **CLI:** cobra (`server`, `migrate`)
+- **Lint:** golangci-lint (`.golangci.yml`) — `golangci-lint run`
+- **Deploy:** `Dockerfile` multi-stage (binary tunggal + tzdata)
 
 ## Menjalankan (lokal)
 
 ```bash
 cp .env.example .env            # sesuaikan bila perlu
 docker compose up -d            # postgres + redis
-go run . migrate up             # buat tabel (jalankan dari root project)
+go run . migrate up             # buat tabel (migrasi ter-embed di binary)
 go run . server                 # start HTTP server di APP_HOST:APP_PORT
 ```
 
@@ -50,23 +53,27 @@ curl -s -X POST localhost:8080/v1/examples \
 cmd/                 entrypoint cobra (server, migrate)
 configs/             config (viper) + koneksi DB
 internal/
-  di/                wiring dig
-  shared/            dependency, TxManager, logger (zap), cache
+  di/                wiring dig (agregasi Register semua layer)
+  shared/            dependency, TxManager, logger (zap), cache, validate
   middleware/        RequestID, logger (CORS/Recover pakai bawaan Echo)
   server/            bootstrap Echo + error handler + graceful shutdown
+  router/            satu file routing modular (satu fungsi per domain)
   domain/<ctx>/      entity murni + domain error (tanpa dependensi DB)
-  service/           interface repository + DTO + logika bisnis
+  service/<ctx>/     subfolder per domain: interface repo + DTO + logika
   repository/        model GORM + implementasi repository
-  handler/           handler HTTP + tabel route
-migrations/          migrasi goose
+  handler/           handler HTTP murni (route-nya di router/)
+migrations/          migrasi goose (ter-embed ke binary)
 pkg/                 apperror, response (Envelope[T]), route (registry)
 ```
 
 ## Membuat domain baru
 
-Salin `internal/domain/example`, `service/example_*`, `repository/example_*`,
-`handler/example_handler.go` sebagai pola, ganti nama, lalu daftarkan route-nya
-di `cmd/server.go`. Tambah migrasi baru di `migrations/` (`NNNNN_nama.sql`).
+Salin `internal/domain/example` dan `internal/service/example/` sebagai pola,
+lalu buat `repository/<ctx>_repository.go` + `handler/<ctx>_handler.go`.
+Terakhir, daftarkan: `Provide` konstruktor di `service/di.go`,
+`repository/di.go`, `handler/di.go`; satu fungsi route di
+`internal/router/router.go`; dan migrasi baru di `migrations/`
+(`NNNNN_nama.sql` — otomatis ikut ter-embed).
 
 ## Kloning untuk produk
 

@@ -1,0 +1,21 @@
+version: "2"
+
+# Lean config: the default standard set (errcheck, govet, ineffassign,
+# staticcheck, unused) plus a few high-value extras. Add linters as the
+# team feels the need, not preemptively.
+linters:
+  enable:
+    - gosec
+    - misspell
+  exclusions:
+    rules:
+      # Test helpers may ignore errors and use weak randomness freely.
+      - path: _test\.go
+        linters:
+          - gosec
+          - errcheck
+
+formatters:
+  enable:
+    - gofmt
+    - goimports

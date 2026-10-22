@@ -107,7 +107,7 @@ func GetConfig() *Config {
 
 func bindEnvs(v *viper.Viper, iface interface{}, prefix string) {
 	ifaceVal := reflect.ValueOf(iface)
-	if ifaceVal.Kind() == reflect.Ptr {
+	if ifaceVal.Kind() == reflect.Pointer {
 		ifaceVal = ifaceVal.Elem()
 	}
 	ifaceType := ifaceVal.Type()

@@ -20,7 +20,7 @@ var serverCmd = &cobra.Command{
 		}
 
 		return container.Invoke(func(dep shared.Dependency, health *handler.HealthHandler, example *handler.ExampleHandler) error {
-			defer dep.Close()
+			defer func() { _ = dep.Close() }()
 
 			e := server.New(dep.Logger)
 

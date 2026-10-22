@@ -8,11 +8,12 @@ import (
 
 	"go-starter-kit/configs/db"
 	"go-starter-kit/internal/di"
+	"go-starter-kit/migrations"
 )
 
-// migrationsDir is resolved relative to the working directory, so migrate is
-// run from the project root.
-const migrationsDir = "migrations"
+// migrationsDir is "." because the SQL files are embedded into the binary (see
+// migrations/embed.go) — migrate works from any directory, no folder to ship.
+const migrationsDir = "."
 
 var migrateCmd = &cobra.Command{
 	Use:       "migrate [up|down|status]",
@@ -30,6 +31,7 @@ var migrateCmd = &cobra.Command{
 			if err != nil {
 				return err
 			}
+			goose.SetBaseFS(migrations.Embed)
 			if err := goose.SetDialect("postgres"); err != nil {
 				return err
 			}
